@@ -2,13 +2,15 @@ package com.gabotolofullstack.cursospringboot.controller;
 
 import com.gabotolofullstack.cursospringboot.entity.User;
 import com.gabotolofullstack.cursospringboot.service.UserService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/api/users")
@@ -65,4 +67,12 @@ public class UserController {
     }
 
     //Read all user
+    @GetMapping
+    public List<User> readAll(){
+        //para transformar un iterable en una lista vamos usar lo q proporciona java8 stream
+        List<User> users = StreamSupport
+                .stream(userService.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+        return users;
+    }
 }
